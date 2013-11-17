@@ -13,7 +13,8 @@ bool CglassSprite::init(string texFileName){
         for(int i=0;i<200;i++){
             float n=max(winSize.width/2, winSize.height/2)*1.5;
             float randm=(rand()%10000)*1.0/10000;
-            float r=(2*n-1-sqrtf(4*n*n*(1-randm)-4*n*(1-randm)+1))/2;
+      //      float r=(2*n-1-sqrtf(4*n*n*(1-randm)-4*n*(1-randm)+1))/2;
+            float r=n-n*sqrtf(1-randm);
             float randA=rand()%360;
             float x=r*cosf(randA*M_PI/180);
             float y=r*sinf(randA*M_PI/180);

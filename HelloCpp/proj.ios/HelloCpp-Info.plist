@@ -35,13 +35,13 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.3yearchild.2DSpotLight</string>
+	<string>com.3yearchild.glassBreak</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>2D SpotLight</string>
 	<key>CFBundleDisplayName</key>
-	<string>2D swirl</string>
+	<string>glassBreak</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
