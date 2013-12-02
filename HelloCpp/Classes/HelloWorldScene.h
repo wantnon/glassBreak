@@ -42,6 +42,14 @@ public:
     CCControlSlider* m_pSliderCtl;
     void sliderAction(CCObject* sender, CCControlEvent controlEvent);
 public:
+    //menu0
+    CCMenu* pMenu0;
+    CCMenuItemImage *pMenuItem0;
+    CCMenuItemImage *pMenuItem1;
+    void menuItem0Callback(CCObject* pSender);
+    void menuItem1Callback(CCObject* pSender);
+    CCSprite*checkPic;
+
 
 };
 

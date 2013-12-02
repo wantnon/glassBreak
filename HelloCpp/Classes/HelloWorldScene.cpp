@@ -61,15 +61,31 @@ bool HelloWorld::init()
     CCSize winSize=CCDirector::sharedDirector()->getWinSize();//winSize equals to designResolutionSize
     //show frame rate info
     CCDirector::sharedDirector()->setDisplayStats(true);
-    
-    
+    //back ground sprite
+    CCSprite*backGround=new CCSprite();
+    backGround->autorelease();
+    backGround->initWithFile("wall.png");
+    backGround->setPosition(ccp(winSize.width/2, winSize.height/2));
+    this->addChild(backGround,0);
+    //frame sprite
+    CCSprite*frameSprite=new CCSprite();
+    frameSprite->autorelease();
+    frameSprite->initWithFile("frame.png");
+    frameSprite->setPosition(ccp(winSize.width/2, winSize.height/2));
+    this->addChild(frameSprite,3);
     //glassSprite
     glassSprite=new CglassSprite();
-    glassSprite->init("HelloWorld_iphone5.png");
+    glassSprite->autorelease();
+    glassSprite->init("pic.png",CCPoint(cosf(-60*M_PI/180),sinf(-60*M_PI/180)));
     glassSprite->setAnchorPoint(ccp(0.5, 0.5));
     glassSprite->setPosition(ccp(winSize.width/2, winSize.height/2));
-    this->addChild(glassSprite,1);
-    glassSprite->release();
+    this->addChild(glassSprite,2);
+    //wood base sprite
+    CCSprite*woodBase=new CCSprite();
+    woodBase->autorelease();
+    woodBase->initWithFile("woodBase.png");
+    woodBase->setPosition(ccp(winSize.width/2, winSize.height/2));
+    this->addChild(woodBase,1);
     
 /*    //slider
 	{
@@ -89,32 +105,84 @@ bool HelloWorld::init()
         this->addChild(pLabel, 1);
 	}
 	  */
-    
-  /*  // author info
+    //----menu0
     {
-        CCLabelTTF* pLabel = CCLabelTTF::create("by yang chao (wantnon) 2013-11-16", "Arial", 30);
+        CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
+        
+        CCLabelTTF* pLabel0 = CCLabelTTF::create("even", "Arial", 25);
+        CCLabelTTF* pLabel1 = CCLabelTTF::create("density", "Arial", 25);
+        
+        pMenuItem0 = CCMenuItemImage::create("btn.png","btn_dn.png",this,menu_selector(HelloWorld::menuItem0Callback));
+        pMenuItem0->setPosition(CCPointZero);
+        pMenuItem0->addChild(pLabel0,10);
+        pLabel0->setPosition(ccp(pMenuItem0->getContentSize().width/2,pMenuItem0->getContentSize().height/2));
+        
+        pMenuItem1 = CCMenuItemImage::create("btn.png","btn_dn.png",this,menu_selector(HelloWorld::menuItem1Callback));
+        pMenuItem1->setPosition(pMenuItem0->getPosition()-ccp(0,pMenuItem0->getContentSize().height));
+        pMenuItem1->addChild(pLabel1,10);
+        pLabel1->setPosition(ccp(pMenuItem1->getContentSize().width/2,pMenuItem1->getContentSize().height/2));
+        
+        pMenu0 = CCMenu::create(pMenuItem0, pMenuItem1,NULL);
+        pMenu0->setPosition(ccp(screenSize.width*(5.0/6), screenSize.height*(3.0/4)));
+        this->addChild(pMenu0, 10);
+        
+        checkPic = CCSprite::create();
+        checkPic->initWithFile("check.png");
+        checkPic->setPosition(ccp(pMenuItem0->getContentSize().width+checkPic->getContentSize().width/2,pMenuItem0->getContentSize().height/2));
+        
+        pMenuItem0->addChild(checkPic);
+    }
+
+    
+    // author info
+    {
+        CCLabelTTF* pLabel = CCLabelTTF::create("by yang chao (wantnon) 2013-12-1", "Arial", 30);
         pLabel->setPosition(ccp(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - pLabel->getContentSize().height-60));
-        this->addChild(pLabel, 1);
+                                origin.y + visibleSize.height - pLabel->getContentSize().height-59));
+        this->addChild(pLabel, 10);
     }
     
     // add a label shows "Hello World"
     // create and initialize a label
  
-    CCLabelTTF* pLabel = CCLabelTTF::create("2D SpotLight Demo", "Arial", 45);
+    CCLabelTTF* pLabel = CCLabelTTF::create("Glass Break Demo", "Arial", 45);
     
     // position the label on the center of the screen
     pLabel->setPosition(ccp(origin.x + visibleSize.width/2,
                             origin.y + visibleSize.height - pLabel->getContentSize().height));
 
     // add the label as a child to this layer
-    this->addChild(pLabel, 1);
+    this->addChild(pLabel, 10);
   
-    */
    
     
     return true;
 }
+
+void HelloWorld::menuItem0Callback(CCObject* pSender){
+    checkPic->retain();
+    checkPic->removeFromParentAndCleanup(false);
+    pMenuItem0->addChild(checkPic);
+    checkPic->release();
+    checkPic->setPosition(ccp(pMenuItem0->getContentSize().width+checkPic->getContentSize().width/2,pMenuItem0->getContentSize().height/2));
+    //
+    glassSprite->breakMode=eBreakMode_even;
+    
+    
+    
+}
+
+void HelloWorld::menuItem1Callback(CCObject* pSender){
+    checkPic->retain();
+    checkPic->removeFromParentAndCleanup(false);
+    pMenuItem1->addChild(checkPic);
+    checkPic->release();
+    checkPic->setPosition(ccp(pMenuItem1->getContentSize().width+checkPic->getContentSize().width/2,pMenuItem1->getContentSize().height/2));
+    //
+    glassSprite->breakMode=eBreakMode_density;
+    
+}
+
 void HelloWorld::sliderAction(CCObject* sender, CCControlEvent controlEvent)
 {
     CCControlSlider* pSlider = (CCControlSlider*)sender;
@@ -152,7 +220,8 @@ void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event)
         
         CCPoint loc_winSpace = touch->getLocationInView();
         CCPoint loc_GLSpace = CCDirector::sharedDirector()->convertToGL(loc_winSpace);
-        
+
+        break;
     }
 }
 void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches , cocos2d::CCEvent* event)
@@ -171,10 +240,9 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches , cocos2d::CCEvent* even
         CCPoint loc_winSpace = touch->getLocationInView();
         CCPoint loc_GLSpace = CCDirector::sharedDirector()->convertToGL(loc_winSpace);
 
-
     
         
-		
+		break;
     }
     
 }
@@ -194,8 +262,18 @@ void HelloWorld::ccTouchesBegan(CCSet* touches, CCEvent* event)
         CCPoint loc_winSpace = touch->getLocationInView();
         CCPoint loc_GLSpace = CCDirector::sharedDirector()->convertToGL(loc_winSpace);
         //CCLOG("loc_GLSpace:%f,%f",loc_GLSpace.x,loc_GLSpace.y);
-
-        
+        if(this->glassSprite->boundingBox().containsPoint(loc_GLSpace)){
+            this->glassSprite->touchPoint=this->glassSprite->convertToNodeSpace(loc_GLSpace);
+            this->glassSprite->updateState();
+            if(glassSprite->state!=eGlassState_perfect){
+                this->pMenuItem0->setVisible(false);
+                this->pMenuItem1->setVisible(false);
+            }else{
+                this->pMenuItem0->setVisible(true);
+                this->pMenuItem1->setVisible(true);
+            }
+        }
+        break;
     }
 }
 
