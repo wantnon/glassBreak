@@ -125,15 +125,16 @@ int findPointInPointList(const CCPoint&point,const vector<CCPoint>&pointList,flo
 }
 float calculateArea(CCPoint v0,CCPoint v1,CCPoint v2)//xxxx need to check!!!
 //calculateArea of triangle v0v1v2
+//ref to: http://zhidao.baidu.com/link?url=zQUSnOMZK_hGlSDVy5kWXDRraAbedjUoNtav83p1fdmoCJvaSADSc5bJ1Wr0kmzFFewuDevYQ2fFOqX1vIJaja
 {
-    CCPoint e1=v1-v0;
-    CCPoint e2=v2-v0;
-    float temp[3];
-    temp[0]=e1.y-e2.y;
-    temp[1]=e2.x-e1.x;
-    temp[2]=e1.x*e2.y-e1.y*e2.x;
-    float area=sqrtf(temp[0]*temp[0]+temp[1]*temp[1]+temp[2]*temp[2]);
-    return area;
+    const float x1=v0.x;
+    const float y1=v0.y;
+    const float x2=v1.x;
+    const float y2=v1.y;
+    const float x3=v2.x;
+    const float y3=v2.y;
+    float Area=0.5*fabsf(x1*y2+x2*y3+x3*y1-x1*y3-x2*y1-x3*y2);
+    return Area;
     
 }
 int randomSelectByProbility(const vector<float>&probilityList){//return the selected one's index
